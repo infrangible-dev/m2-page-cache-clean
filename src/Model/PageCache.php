@@ -47,10 +47,10 @@ class PageCache
     private $cacheEvents = [];
 
     /**
-     * @param Variables $variables
-     * @param Stores $storeHelper
+     * @param Variables       $variables
+     * @param Stores          $storeHelper
      * @param LoggerInterface $logger
-     * @param Manager $eventManager
+     * @param Manager         $eventManager
      */
     public function __construct(
         Variables $variables,
@@ -101,45 +101,8 @@ class PageCache
      */
     public function addCacheEvent(string $entityType, int $entityId, int $storeId)
     {
-        if (empty($entityType)) {
+        if ($this->variables->isEmpty($entityType)) {
             throw new \Exception('Trying to add cache event without any entity type');
-        }
-
-        if (empty($entityId)) {
-            throw new \Exception(
-                sprintf('Trying to add cache event without entity id for entity type: %s', $entityType)
-            );
-        }
-
-        if (!is_numeric($entityId)) {
-            throw new \Exception(
-                sprintf(
-                    'Trying to add cache event with invalid entity id: %s for entity type: %s',
-                    $entityId,
-                    $entityType
-                )
-            );
-        }
-
-        if ($this->variables->isEmpty($storeId)) {
-            throw new \Exception(
-                sprintf(
-                    'Trying to add cache event without store id for entity type: %s and entity id: %d',
-                    $entityType,
-                    $entityId
-                )
-            );
-        }
-
-        if (!is_numeric($storeId)) {
-            throw new \Exception(
-                sprintf(
-                    'Trying to add cache event with invalid store id: %s for entity type: %s and entity id: %d',
-                    $storeId,
-                    $entityType,
-                    $entityId
-                )
-            );
         }
 
         if ($storeId == 0) {
@@ -166,7 +129,12 @@ class PageCache
             $this->cacheEvents[$entityType][$storeId][] = $entityId;
 
             $this->logger->debug(
-                'Article with id: %d in store with id: %d requires site cache change', [$entityId, $storeId]
+                sprintf(
+                    'Entity of type: %s with id: %d in store with id: %d requires page cache change',
+                    $entityType,
+                    $entityId,
+                    $storeId
+                )
             );
         }
     }
@@ -192,8 +160,12 @@ class PageCache
 
         foreach ($this->cacheEvents[$entityType] as $storeId => $entityIds) {
             $this->logger->debug(
-                'Processing cache cleaning for entity type: %s, store with id: %d and %d entity(ies)',
-                [$entityType, $storeId, count($entityIds)]
+                sprintf(
+                    'Processing cache cleaning for entity type: %s, store with id: %d and %d entity(ies)',
+                    $entityType,
+                    $storeId,
+                    count($entityIds)
+                )
             );
 
             $this->eventManager->dispatch('page_cache_clean', [
