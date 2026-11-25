@@ -1,11 +1,19 @@
 {
     "name": "infrangible/m2-page-cache-clean",
-    "description": "Infrangible Magento 2 Page Cache Clean",
+    "description": "Adds a \"Clean Page Cache\" button to the product and category edit pages, so the cached pages of just this product or category are refreshed.",
     "type": "magento2-module",
     "version": "1.0.2",
     "license": "MIT",
     "keywords": [
-        "Magento"
+        "Magento",
+        "Magento 2",
+        "Adobe Commerce",
+        "Performance",
+        "Admin tools",
+        "Catalog",
+        "clean page cache of one product",
+        "refresh cached category page",
+        "page cache button"
     ],
     "homepage": "https://bitbucket.org/infrangible/m2-page-cache-clean",
     "authors": [
